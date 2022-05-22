@@ -1,7 +1,5 @@
-package io.netty.channel;
-
 /*
- * Copyright 2016 The Netty Project
+ * Copyright 2012 The Netty Project
  *
  * The Netty Project licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
@@ -15,18 +13,18 @@ package io.netty.channel;
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+package io.netty.channel;
+
+import io.netty.util.concurrent.OrderedEventExecutor;
 
 /**
- * Factory which uses the default select strategy.
+ * Will handle all the I/O operations for a {@link Channel} once registered.
+ *
+ * One {@link EventLoop} instance will usually handle more than one {@link Channel} but this may depend on
+ * implementation details and internals.
+ *
  */
-public final class DefaultSelectStrategyFactory implements SelectStrategyFactory {
-    public static final SelectStrategyFactory INSTANCE = new DefaultSelectStrategyFactory();
-
-    private DefaultSelectStrategyFactory() {
-    }
-
+public interface EventLoop extends OrderedEventExecutor, EventLoopGroup {
     @Override
-    public SelectStrategy newSelectStrategy() {
-        return DefaultSelectStrategy.INSTANCE;
-    }
+    EventLoopGroup parent();
 }

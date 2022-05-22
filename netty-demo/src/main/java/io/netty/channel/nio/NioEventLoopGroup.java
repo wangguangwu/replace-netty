@@ -1,9 +1,8 @@
 package io.netty.channel.nio;
 
-import io.netty.channel.DefaultSelectStrategyFactory;
-import io.netty.channel.MultithreadEventLoopGroup;
-import io.netty.channel.SelectStrategyFactory;
+import io.netty.channel.*;
 import io.netty.util.concurrent.EventExecutor;
+import io.netty.util.concurrent.RejectedExecutionHandler;
 import io.netty.util.concurrent.RejectedExecutionHandlers;
 
 import java.nio.channels.spi.SelectorProvider;
@@ -61,7 +60,22 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
     }
 
     @Override
-    protected EventExecutor newChild(Executor executor, Object... args) throws Exception {
-        throw new UnsupportedOperationException();
+    protected EventLoop newChild(Executor executor, Object... args) throws Exception {
+        SelectorProvider selectorProvider = (SelectorProvider) args[0];
+        SelectStrategyFactory selectStrategyFactory = (SelectStrategyFactory) args[1];
+        RejectedExecutionHandler rejectedExecutionHandler = (RejectedExecutionHandler) args[2];
+        EventLoopTaskQueueFactory taskQueueFactory = null;
+        EventLoopTaskQueueFactory tailTaskQueueFactory = null;
+
+        int argsLength = args.length;
+        if (argsLength > 3) {
+            taskQueueFactory = (EventLoopTaskQueueFactory) args[3];
+        }
+        if (argsLength > 4) {
+            tailTaskQueueFactory = (EventLoopTaskQueueFactory) args[4];
+        }
+        return new NioEventLoop(this, executor, selectorProvider,
+                selectStrategyFactory.newSelectStrategy(),
+                rejectedExecutionHandler, taskQueueFactory, tailTaskQueueFactory);
     }
 }

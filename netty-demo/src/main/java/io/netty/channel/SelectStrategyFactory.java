@@ -20,8 +20,8 @@ package io.netty.channel;
  */
 public interface SelectStrategyFactory {
 
-//    /**
-//     * Creates a new {@link SelectStrategy}.
-//     */
-//    SelectStrategy newSelectStrategy();
+    /**
+     * Creates a new {@link SelectStrategy}.
+     */
+    SelectStrategy newSelectStrategy();
 }
