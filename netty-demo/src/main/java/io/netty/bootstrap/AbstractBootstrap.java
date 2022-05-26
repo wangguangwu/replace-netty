@@ -2,6 +2,7 @@ package io.netty.bootstrap;
 
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.ReflectiveChannelFactory;
 import io.netty.util.internal.ObjectUtil;
 
 
@@ -12,6 +13,9 @@ public abstract class AbstractBootstrap <B extends AbstractBootstrap<B, C>, C ex
 
     volatile EventLoopGroup group;
 
+    @SuppressWarnings("deprecation")
+    private volatile ChannelFactory<? extends C> channelFactory;
+
 
     AbstractBootstrap() {
         // Disallow extending from a different package.
@@ -19,7 +23,7 @@ public abstract class AbstractBootstrap <B extends AbstractBootstrap<B, C>, C ex
 
     AbstractBootstrap(AbstractBootstrap<B, C> bootstrap) {
         group = bootstrap.group;
-//        channelFactory = bootstrap.channelFactory;
+        channelFactory = bootstrap.channelFactory;
 //        handler = bootstrap.handler;
 //        localAddress = bootstrap.localAddress;
 //        synchronized (bootstrap.options) {
@@ -48,10 +52,36 @@ public abstract class AbstractBootstrap <B extends AbstractBootstrap<B, C>, C ex
      * {@link Channel} implementation has no no-args constructor.
      */
     public B channel(Class<? extends C> channelClass) {
-//        return channelFactory(new ReflectiveChannelFactory<C>(
-//                ObjectUtil.checkNotNull(channelClass, "channelClass")
-//        ));
-        return null;
+        return channelFactory(new ReflectiveChannelFactory<C>(
+                ObjectUtil.checkNotNull(channelClass, "channelClass")
+        ));
+    }
+
+    /**
+     * {@link io.netty.channel.ChannelFactory} which is used to create {@link Channel} instances from
+     * when calling {@link #bind()}. This method is usually only used if {@link #channel(Class)}
+     * is not working for you because of some more complex needs. If your {@link Channel} implementation
+     * has a no-args constructor, its highly recommend to just use {@link #channel(Class)} to
+     * simplify your code.
+     */
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public B channelFactory(io.netty.channel.ChannelFactory<? extends C> channelFactory) {
+        return channelFactory((ChannelFactory<C>) channelFactory);
+    }
+
+
+    /**
+     * @deprecated Use {@link #channelFactory(io.netty.channel.ChannelFactory)} instead.
+     */
+    @Deprecated
+    public B channelFactory(ChannelFactory<? extends C> channelFactory) {
+        ObjectUtil.checkNotNull(channelFactory, "channelFactory");
+        if (this.channelFactory != null) {
+            throw new IllegalStateException("channelFactory set already");
+        }
+
+        this.channelFactory = channelFactory;
+        return self();
     }
 
 }

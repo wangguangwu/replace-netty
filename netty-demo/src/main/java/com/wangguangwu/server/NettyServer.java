@@ -25,7 +25,7 @@ public class NettyServer {
                 .group(bossGroup, workerGroup)
                 // 指定服务端的 IO 模型
                 .channel(NioServerSocketChannel.class);
-//                .option(ChannelOption.SO_BACKLOG, 1024)
+//                .option(ChannelOption.SO_BACKLOG, 1024);
 //                .childOption(ChannelOption.SO_KEEPALIVE, true)
 //                .childOption(ChannelOption.TCP_NODELAY, true);
 //                .childHandler(new ChannelInitializer<NioSocketChannel>() {

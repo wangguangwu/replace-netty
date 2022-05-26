@@ -23,18 +23,18 @@ public class NettyServer {
         final ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap
                 .group(bossGroup, workerGroup)
-                .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.SO_BACKLOG, 1024)
-                .childOption(ChannelOption.SO_KEEPALIVE, true)
-                .childOption(ChannelOption.TCP_NODELAY, true)
-                .childHandler(new ChannelInitializer<NioSocketChannel>() {
-                    @Override
-                    protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new FirstServerHandler());
-                    }
-                });
+                .channel(NioServerSocketChannel.class);
+//                .option(ChannelOption.SO_BACKLOG, 1024)
+//                .childOption(ChannelOption.SO_KEEPALIVE, true)
+//                .childOption(ChannelOption.TCP_NODELAY, true)
+//                .childHandler(new ChannelInitializer<NioSocketChannel>() {
+//                    @Override
+//                    protected void initChannel(NioSocketChannel ch) {
+//                        ch.pipeline().addLast(new FirstServerHandler());
+//                    }
+//                });
 
-        bind(serverBootstrap, PORT);
+//        bind(serverBootstrap, PORT);
     }
 
     private static void bind(ServerBootstrap serverBootstrap, int port) {
