@@ -42,4 +42,16 @@ public abstract class AbstractBootstrap <B extends AbstractBootstrap<B, C>, C ex
         return (B) this;
     }
 
+    /**
+     * The {@link Class} which is used to create {@link Channel} instances from.
+     * You either use this or {@link #channelFactory(io.netty.channel.ChannelFactory)} if your
+     * {@link Channel} implementation has no no-args constructor.
+     */
+    public B channel(Class<? extends C> channelClass) {
+//        return channelFactory(new ReflectiveChannelFactory<C>(
+//                ObjectUtil.checkNotNull(channelClass, "channelClass")
+//        ));
+        return null;
+    }
+
 }
