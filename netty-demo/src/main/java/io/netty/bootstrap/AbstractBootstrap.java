@@ -1,9 +1,13 @@
 package io.netty.bootstrap;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.ReflectiveChannelFactory;
 import io.netty.util.internal.ObjectUtil;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 /**
@@ -16,6 +20,8 @@ public abstract class AbstractBootstrap <B extends AbstractBootstrap<B, C>, C ex
     @SuppressWarnings("deprecation")
     private volatile ChannelFactory<? extends C> channelFactory;
 
+    private final Map<ChannelOption<?>, Object> options = new LinkedHashMap<ChannelOption<?>, Object>();
+
 
     AbstractBootstrap() {
         // Disallow extending from a different package.
@@ -26,9 +32,9 @@ public abstract class AbstractBootstrap <B extends AbstractBootstrap<B, C>, C ex
         channelFactory = bootstrap.channelFactory;
 //        handler = bootstrap.handler;
 //        localAddress = bootstrap.localAddress;
-//        synchronized (bootstrap.options) {
-//            options.putAll(bootstrap.options);
-//        }
+        synchronized (bootstrap.options) {
+            options.putAll(bootstrap.options);
+        }
 //        attrs.putAll(bootstrap.attrs);
     }
 
@@ -81,6 +87,23 @@ public abstract class AbstractBootstrap <B extends AbstractBootstrap<B, C>, C ex
         }
 
         this.channelFactory = channelFactory;
+        return self();
+    }
+
+
+    /**
+     * Allow to specify a {@link ChannelOption} which is used for the {@link Channel} instances once they got
+     * created. Use a value of {@code null} to remove a previous set {@link ChannelOption}.
+     */
+    public <T> B option(ChannelOption<T> option, T value) {
+        ObjectUtil.checkNotNull(option, "option");
+        synchronized (options) {
+            if (value == null) {
+                options.remove(option);
+            } else {
+                options.put(option, value);
+            }
+        }
         return self();
     }
 

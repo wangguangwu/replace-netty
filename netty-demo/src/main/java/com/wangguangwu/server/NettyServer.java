@@ -1,6 +1,7 @@
 package com.wangguangwu.server;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,10 @@ public class NettyServer {
                 // 配置两个线程组
                 .group(bossGroup, workerGroup)
                 // 指定服务端的 IO 模型
-                .channel(NioServerSocketChannel.class);
-//                .option(ChannelOption.SO_BACKLOG, 1024);
+                .channel(NioServerSocketChannel.class)
+                // 给服务端 channel 设置属性
+                // 设置系统用于临时存放已完成三次握手的请求的队列的最大长度
+                .option(ChannelOption.SO_BACKLOG, 1024);
 //                .childOption(ChannelOption.SO_KEEPALIVE, true)
 //                .childOption(ChannelOption.TCP_NODELAY, true);
 //                .childHandler(new ChannelInitializer<NioSocketChannel>() {
