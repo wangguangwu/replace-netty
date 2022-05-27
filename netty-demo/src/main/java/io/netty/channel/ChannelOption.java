@@ -18,6 +18,8 @@ public class ChannelOption<T> extends AbstractConstant<ChannelOption<T>> {
 
     public static final ChannelOption<ByteBufAllocator> ALLOCATOR = valueOf("ALLOCATOR");
     public static final ChannelOption<Integer> SO_BACKLOG = valueOf("SO_BACKLOG");
+    public static final ChannelOption<Boolean> SO_KEEPALIVE = valueOf("SO_KEEPALIVE");
+    public static final ChannelOption<Boolean> TCP_NODELAY = valueOf("TCP_NODELAY");
 
     /**
      * Creates a new instance.

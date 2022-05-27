@@ -28,9 +28,9 @@ public class NettyServer {
                 .channel(NioServerSocketChannel.class)
                 // 给服务端 channel 设置属性
                 // 设置系统用于临时存放已完成三次握手的请求的队列的最大长度
-                .option(ChannelOption.SO_BACKLOG, 1024);
-//                .childOption(ChannelOption.SO_KEEPALIVE, true)
-//                .childOption(ChannelOption.TCP_NODELAY, true);
+                .option(ChannelOption.SO_BACKLOG, 1024)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
+                .childOption(ChannelOption.TCP_NODELAY, true);
 //                .childHandler(new ChannelInitializer<NioSocketChannel>() {
 //                    @Override
 //                    protected void initChannel(NioSocketChannel ch) {
