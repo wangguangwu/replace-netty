@@ -1,9 +1,6 @@
 package io.netty.bootstrap;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.ServerChannel;
+import io.netty.channel.*;
 
 import io.netty.util.internal.ObjectUtil;
 import io.netty.util.internal.logging.InternalLogger;
@@ -23,6 +20,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
     // purposes.
     private final Map<ChannelOption<?>, Object> childOptions = new LinkedHashMap<ChannelOption<?>, Object>();
 
+    private volatile ChannelHandler childHandler;
 
     private volatile EventLoopGroup childGroup;
 
@@ -42,6 +40,16 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         return this;
     }
 
+    private ServerBootstrap(ServerBootstrap bootstrap) {
+        super(bootstrap);
+        childGroup = bootstrap.childGroup;
+        childHandler = bootstrap.childHandler;
+        synchronized (bootstrap.childOptions) {
+            childOptions.putAll(bootstrap.childOptions);
+        }
+//        childAttrs.putAll(bootstrap.childAttrs);
+    }
+
     /**
      * Allow to specify a {@link ChannelOption} which is used for the {@link Channel} instances once they get created
      * (after the acceptor accepted the {@link Channel}). Use a value of {@code null} to remove a previous set
@@ -56,6 +64,15 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
                 childOptions.put(childOption, value);
             }
         }
+        return this;
+    }
+
+
+    /**
+     * Set the {@link ChannelHandler} which is used to serve the request for the {@link Channel}'s.
+     */
+    public ServerBootstrap childHandler(ChannelHandler childHandler) {
+        this.childHandler = ObjectUtil.checkNotNull(childHandler, "childHandler");
         return this;
     }
 

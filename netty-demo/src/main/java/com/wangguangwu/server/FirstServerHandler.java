@@ -1,19 +1,19 @@
-//package com.wangguangwu.server;
-//
+package com.wangguangwu.server;
+
 //import io.netty.buffer.ByteBuf;
 //import io.netty.channel.ChannelHandlerContext;
-//import io.netty.channel.ChannelInboundHandlerAdapter;
-//import lombok.extern.slf4j.Slf4j;
-//
-//import java.nio.charset.StandardCharsets;
-//import java.util.Date;
-//
-///**
-// * @author wangguangwu
-// */
-//@Slf4j
-//public class FirstServerHandler extends ChannelInboundHandlerAdapter {
-//
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.extern.slf4j.Slf4j;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+
+/**
+ * @author wangguangwu
+ */
+@Slf4j
+public class FirstServerHandler extends ChannelInboundHandlerAdapter {
+
 //    @Override
 //    public void channelRead(ChannelHandlerContext ctx, Object msg) {
 //        ByteBuf byteBuf = (ByteBuf) msg;
@@ -35,5 +35,5 @@
 //
 //        return buffer;
 //    }
-//
-//}
+
+}
